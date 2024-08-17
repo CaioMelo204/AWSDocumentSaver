@@ -1,24 +1,18 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CategoryModule } from './modules/category/category.module';
 import { DocumentModule } from './modules/document/document.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import * as process from "node:process";
+import {ConfigModule} from "@nestjs/config";
+import {MongooseModule} from "@nestjs/mongoose";
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: '',
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'test',
-      entities: [],
-      synchronize: true,
-    }),
-    CategoryModule,
+    ConfigModule.forRoot(),
+    MongooseModule.forRoot(process.env.MONGO_URL),
     DocumentModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService],
